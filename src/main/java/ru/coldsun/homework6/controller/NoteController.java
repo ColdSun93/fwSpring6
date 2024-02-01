@@ -21,7 +21,6 @@ public class NoteController {
     @PostMapping
     public Note addNote(@RequestBody Note note){
         note.setCreationDate(LocalDateTime.now());
-        //if (note.getStatus()==null) note.setStatus(TaskStatus.NOT_STARTED);
         return noteRepository.save(note);
     }
 
@@ -29,9 +28,12 @@ public class NoteController {
      * Редактирование заметки.
      */
     @PutMapping("/{id}")
-    public Note updateTaskStatus(@PathVariable Long id, @RequestBody Note note){
+    public Note updateNoteStatus(@PathVariable Long id, @RequestBody Note note){
         Note changeNote = noteRepository.findById(id).orElse(null);
         if (changeNote != null) {
+            if (note.getContent()!=null) changeNote.setContent(note.getContent());
+            if (note.getContent()!=null) changeNote.setHeading(note.getContent());
+            if (note.getCreationDate()!=null) changeNote.setCreationDate(note.getCreationDate());
             return noteRepository.save(changeNote);
         } else {
             return null;
@@ -50,9 +52,10 @@ public class NoteController {
      * Получение заметки по id
      */
     @GetMapping("/{id}")
-    public Note getById(@PathVariable("id") Long id) {
+    public Note findById(@PathVariable("id") Long id) {
         return noteRepository.findById(id).orElseThrow();
     }
+
     /**
      * Удаление заметки
      */
